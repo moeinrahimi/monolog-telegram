@@ -29,15 +29,9 @@ class TelegramHandler extends AbstractProcessingHandler
      * @param string $token Telegram Bot Access Token Provided by BotFather
      * @param string $channel Telegram Channel userName
      * @param string|int @level Debug level of Logged Event
-
      */
-
     public function __construct($token, $channel,$timeZone = 'UTC',$dateFormat='F j, Y, g:i a')
     {
-
-        if (!extension_loaded('curl')) {
-            throw new Exception('curl is needed to use this library');
-        }
         $this->token   = $token;
         $this->channel = $channel;
         $this->dateFormat = $dateFormat;
