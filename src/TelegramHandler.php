@@ -28,13 +28,16 @@ class TelegramHandler extends AbstractProcessingHandler
      *
      * @param string $token Telegram Bot Access Token Provided by BotFather
      * @param string $channel Telegram Channel userName
-     * @param string|int @level Debug level of Logged Event
+     * @param string $timezone set default date timezone
+     * @param string $dateFormat set default date format 
+     * @param string $timeOut curl timeout 
      */
-    public function __construct($token, $channel,$timeZone = 'UTC',$dateFormat='F j, Y, g:i a')
+    public function __construct($token, $channel,$timeZone = 'UTC',$dateFormat='Y-m-d H:i:s',$timeOut = 100)
     {
         $this->token   = $token;
         $this->channel = $channel;
         $this->dateFormat = $dateFormat;
+        $this->timeOut = $timeOut;
         date_default_timezone_set($timeZone);
     }
 
@@ -48,9 +51,8 @@ class TelegramHandler extends AbstractProcessingHandler
         $format = new LineFormatter;
         $context = $record['context'] ? $format->stringify($record['context']) : '';
         $date =  date($this->dateFormat);
-        $message = $date . PHP_EOL . $this->getEmoji($record['level']) . ' ' . $record['message'] . $context;
+        $message =  $date . ' ' . $record['channel'].'.'.$record['level_name'] . ' ' . PHP_EOL . $this->getEmoji($record['level']) . ' ' . $record['message'] . ' ' . $context . ' ' . json_encode($record['extra']);
         $this->send($message);
-
     }
 
     /**
@@ -64,9 +66,12 @@ class TelegramHandler extends AbstractProcessingHandler
       try{
         $ch = curl_init();
         $url = self::host . $this->token . "/SendMessage";
+        $timeOut = $this->timeOut;
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeOut); 
+        curl_setopt($ch, CURLOPT_TIMEOUT, $timeOut); 
         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query(array(
             'text'    => $message,
             'chat_id' => $this->channel,
