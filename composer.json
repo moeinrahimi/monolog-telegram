@@ -18,7 +18,8 @@
     },
     "require": {
         "monolog/monolog": "~1",
-        "ext-curl": "*"
+        "ext-curl": "*",
+        "ext-json": "*"
     }
 
 }
