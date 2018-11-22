@@ -31,9 +31,9 @@ class TelegramHandler extends AbstractProcessingHandler
      *
      * @param string $token Telegram Bot Access Token Provided by BotFather
      * @param string $channel Telegram Channel userName
-     * @param string $timezone set default date timezone
+     * @param string $timeZone set default date timezone
      * @param string $dateFormat set default date format 
-     * @param string $timeOut curl timeout 
+     * @param int $timeOut curl timeout
      */
     public function __construct($token, $channel,$timeZone = 'UTC',$dateFormat='Y-m-d H:i:s',$timeOut = 100)
     {
