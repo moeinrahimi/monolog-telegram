@@ -18,10 +18,12 @@ use Monolog\Logger;
 class TelegramHandler extends AbstractProcessingHandler
 {
 
-    private $token;
-    private $channel;
-    private $dateFormat;
+
     protected $timeOut;
+    protected $token;
+    protected $channel;
+    protected $dateFormat;
+
     const host = 'https://api.telegram.org/bot';
 
     /**
