@@ -31,9 +31,9 @@ composer require rahimi/monolog-telegram
 it is just like other monolog handlers, you need to pass below paramaters to telegramhandler object:
 - **$token** your bot token provided by BotFather
 - **$channel** your telegram channel userName
-- **$date_default_timezone_set** choose date_default_timezone_set function timezone (optional)
-- **$dateFormat** pass date format (optional)
-
+- **$date_default_timezone_set** is the [timezone identifier](http://php.net/manual/en/timezones.php), like `'UTC'` or '`Europe/Lisbon`', that will be used as the [default timezone](http://php.net/manual/en/function.date-default-timezone-set.php) by all date/time functions (optional, default value `'UTC'`)
+- **$dateFormat** pass date format (optional, default value `'Y-m-d H:i:s'`)
+- **$timeOut** timeout value in seconds for connection to Telegram servers when sending the log message (optional, default value `100`). Use `0` to wait indefinitely.
 
 # Examples
 Now Simply use it like this :
@@ -43,7 +43,7 @@ require 'vendor/autoload.php';
 use Monolog\Logger;
 use rahimi\TelegramHandler\TelegramHandler;
 $log = new Logger('TelegramHandler');
-$log->pushHandler(new TelegramHandler($token,$channel,'UTC','F j, Y, g:i a'));
+$log->pushHandler(new TelegramHandler($token,$channel,'UTC','F j, Y, g:i a',60));
 
 
 $log->info('hello world !');
