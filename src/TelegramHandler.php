@@ -17,12 +17,15 @@ use Monolog\Logger;
 
 class TelegramHandler extends AbstractProcessingHandler
 {
-
-
     protected $timeOut;
     protected $token;
     protected $channel;
     protected $dateFormat;
+
+    /**
+     * @var array
+     */
+    protected $curlOptions;
 
     const host = 'https://api.telegram.org/bot';
 
@@ -32,16 +35,24 @@ class TelegramHandler extends AbstractProcessingHandler
      * @param string $token Telegram Bot Access Token Provided by BotFather
      * @param string $channel Telegram Channel userName
      * @param string $timeZone set default date timezone
-     * @param string $dateFormat set default date format 
+     * @param string $dateFormat set default date format
      * @param int $timeOut curl timeout
+     * @param array $curlOptions
      */
-    public function __construct($token, $channel,$timeZone = 'UTC',$dateFormat='Y-m-d H:i:s',$timeOut = 100)
-    {
+    public function __construct(
+        $token,
+        $channel,
+        $timeZone = 'UTC',
+        $dateFormat = 'Y-m-d H:i:s',
+        $timeOut = 100,
+        $curlOptions = []
+    ) {
         $this->token   = $token;
         $this->channel = $channel;
         $this->dateFormat = $dateFormat;
         $this->timeOut = $timeOut;
         date_default_timezone_set($timeZone);
+        $this->curlOptions = $curlOptions;
     }
 
     /**
@@ -79,6 +90,9 @@ class TelegramHandler extends AbstractProcessingHandler
             'text'    => $message,
             'chat_id' => $this->channel,
         )));
+        foreach ($this->curlOptions as $option => $value) {
+            curl_setopt($ch, $option, $value);
+        }
          $result = curl_exec($ch);
          $result = json_decode($result,1);
          if($result['ok'] === false){
