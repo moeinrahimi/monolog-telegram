@@ -60,7 +60,7 @@ class TelegramHandler extends AbstractProcessingHandler
      * @param $record[] log data
      * @return void
      */
-    public function write(array $record)
+    public function write(array $record): void
     {
         $format = new LineFormatter;
         $context = $record['context'] ? $format->stringify($record['context']) : '';
